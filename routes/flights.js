@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var flightController = require("../controllers/flights.js");
 
+// base path: /flights
 // GET /flights view all flights with airline, airport, flightNo, departure
 router.get("/", flightController.getFlights);
 
@@ -16,5 +17,8 @@ router.get("/airport/:airport", flightController.getAirport);
 
 // GET /flights/flightNo/:flightNo
 router.get("/flightNo/:flightNo", flightController.getFlightNo);
+
+// GET /flights/ascending
+router.get("/ascending", flightController.getAscendingDeparts);
 
 module.exports = router;

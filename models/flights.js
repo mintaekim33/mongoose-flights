@@ -6,6 +6,7 @@ module.exports = {
   getAirline,
   getAirport,
   getFlightNo,
+  getAscendingDeparts,
 };
 
 function getAll() {
@@ -51,5 +52,14 @@ async function getFlightNo(param) {
     return "no flights with such flight number";
   } else {
     return flightNo;
+  }
+}
+
+async function getAscendingDeparts() {
+  const departureDate = await daoFlights.find({}).sort({ departs: 1 });
+  if (departureDate == null || Object.keys(departureDate).length == 0) {
+    return "no flights with such departure date";
+  } else {
+    return departureDate;
   }
 }
