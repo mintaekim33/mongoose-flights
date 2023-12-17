@@ -4,6 +4,7 @@ module.exports = {
   getAll,
   createFlights,
   getAirline,
+  getAirport,
 };
 
 function getAll() {
@@ -19,6 +20,7 @@ function createFlights(flight) {
 
 async function getAirline(param) {
   //   const flight = await daoFlights.find({ airline: param });
+  // make 'airline' param case insensitive
   const flight = await daoFlights.find({
     airline: { $regex: new RegExp(param, "i") },
   });
@@ -26,5 +28,16 @@ async function getAirline(param) {
     return "no flights with such airline";
   } else {
     return flight;
+  }
+}
+
+async function getAirport(param) {
+  const airport = await daoFlights.find({
+    airport: { $regex: new RegExp(param, "i") },
+  });
+  if (airport == null || Object.keys(airport).length == 0) {
+    return "no flights with such airport";
+  } else {
+    return airport;
   }
 }

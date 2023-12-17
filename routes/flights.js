@@ -9,6 +9,9 @@ router.get("/", flightController.getFlights);
 router.post("/create", flightController.createFlights);
 
 // GET /flights/:airline
-router.get("/:airline", flightController.getAirline);
+router.get("/airline/:airline", flightController.getAirline);
+
+// GET /flights/:airport
+router.get("/airport/:airport", flightController.getAirport);
 
 module.exports = router;
