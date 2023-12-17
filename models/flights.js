@@ -7,6 +7,7 @@ module.exports = {
   getAirport,
   getFlightNo,
   getAscendingDeparts,
+  getPastFlights,
 };
 
 function getAll() {
@@ -23,43 +24,54 @@ function createFlights(flight) {
 async function getAirline(param) {
   //   const flight = await daoFlights.find({ airline: param });
   // make 'airline' param case insensitive
-  const flight = await daoFlights.find({
+  const flights = await daoFlights.find({
     airline: { $regex: new RegExp(param, "i") },
   });
-  if (flight == null || Object.keys(flight).length == 0) {
+  if (flights == null || Object.keys(flights).length == 0) {
     return "no flights with such airline";
   } else {
-    return flight;
+    return flights;
   }
 }
 
 async function getAirport(param) {
-  const airport = await daoFlights.find({
+  const flights = await daoFlights.find({
     airport: { $regex: new RegExp(param, "i") },
   });
-  if (airport == null || Object.keys(airport).length == 0) {
+  if (flights == null || Object.keys(flights).length == 0) {
     return "no flights with such airport";
   } else {
-    return airport;
+    return flights;
   }
 }
 
 async function getFlightNo(param) {
-  const flightNo = await daoFlights
+  const flights = await daoFlights
     .find({ flightNo: param })
     .select("airport departs -_id");
-  if (flightNo == null || Object.keys(flightNo).length == 0) {
+  if (flights == null || Object.keys(flights).length == 0) {
     return "no flights with such flight number";
   } else {
-    return flightNo;
+    return flights;
   }
 }
 
 async function getAscendingDeparts() {
-  const departureDate = await daoFlights.find({}).sort({ departs: 1 });
-  if (departureDate == null || Object.keys(departureDate).length == 0) {
+  const flights = await daoFlights.find({}).sort({ departs: 1 });
+  if (flights == null || Object.keys(flights).length == 0) {
     return "no flights with such departure date";
   } else {
-    return departureDate;
+    return flights;
   }
+}
+
+async function getPastFlights() {
+  const today = new Date();
+  const flights = await daoFlights.find({});
+  flights.forEach((flight) => {
+    if (flight.departs < today) {
+      flight.status = "*";
+    }
+  });
+  return flights;
 }

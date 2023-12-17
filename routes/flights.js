@@ -21,4 +21,7 @@ router.get("/flightNo/:flightNo", flightController.getFlightNo);
 // GET /flights/ascending
 router.get("/ascending", flightController.getAscendingDeparts);
 
+// GET /flights/past
+router.get("/past", flightController.getPastFlights);
+
 module.exports = router;

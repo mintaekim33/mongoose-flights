@@ -25,6 +25,10 @@ const flightSchema = new Schema({
       return new Date(nextYear, today.getMonth(), today.getDate());
     },
   },
+  status: {
+    type: String,
+    default: "upcoming",
+  },
 });
 
 module.exports = mongoose.model("Flights", flightSchema);
