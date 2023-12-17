@@ -8,4 +8,7 @@ router.get("/", flightController.getFlights);
 // POST /flights/create
 router.post("/create", flightController.createFlights);
 
+// GET /flights/:airline
+router.get("/:airline", flightController.getAirline);
+
 module.exports = router;
