@@ -5,6 +5,7 @@ module.exports = {
   createFlights,
   getAirline,
   getAirport,
+  getFlightNo,
 };
 
 function getAll() {
@@ -39,5 +40,16 @@ async function getAirport(param) {
     return "no flights with such airport";
   } else {
     return airport;
+  }
+}
+
+async function getFlightNo(param) {
+  const flightNo = await daoFlights
+    .find({ flightNo: param })
+    .select("airport departs -_id");
+  if (flightNo == null || Object.keys(flightNo).length == 0) {
+    return "no flights with such flight number";
+  } else {
+    return flightNo;
   }
 }

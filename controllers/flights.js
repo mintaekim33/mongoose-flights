@@ -5,6 +5,7 @@ module.exports = {
   createFlights,
   getAirline,
   getAirport,
+  getFlightNo,
 };
 
 async function getFlights(req, res) {
@@ -46,6 +47,15 @@ async function getAirport(req, res) {
   const modelData = await modelFlights.getAirport(req.params.airport);
   if (modelData == "no flights with such airport") {
     res.status(404).json("no flights with such airport");
+  } else {
+    res.json(modelData);
+  }
+}
+
+async function getFlightNo(req, res) {
+  const modelData = await modelFlights.getFlightNo(req.params.flightNo);
+  if (modelData == "no flights with such flight number") {
+    res.status(404).json("no flights with such flight number");
   } else {
     res.json(modelData);
   }
