@@ -28,7 +28,7 @@ router.get("/past", flightController.getPastFlights);
  * "I want to submit a flight info and view all of the properties for that flight." ??
  */
 // GET /flights/properties/:info
-// router.get("/properties/:info", flightController.getProps);
+router.get("/:flightNo/properties", flightController.getProps);
 
 router.put("/:id/destination", flightController.addDestination);
 

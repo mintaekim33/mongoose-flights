@@ -8,7 +8,7 @@ module.exports = {
   getFlightNo,
   getAscendingDeparts,
   getPastFlights,
-  //   getProps,
+  getProps,
   addDestination,
 };
 
@@ -83,14 +83,19 @@ async function getPastFlights(req, res) {
   }
 }
 
-// async function getProps(req, res) {
-//   const modelData = await modelFlights.getProps(req.params.info);
-//   if (modelData == "no data for the flight you are looking for :(") {
-//     res.status(404).json("no data for the flight you are looking for :(");
-//   } else {
-//     res.json(modelData);
-//   }
-// }
+async function getProps(req, res) {
+  try {
+    const modelData = await modelFlights.getProps(req.params.flightNo);
+    if (modelData == "no data for the flight you are looking for :(") {
+      res.status(404).json("no data for the flight you are looking for :(");
+    } else {
+      res.json(modelData);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
 async function addDestination(req, res) {
   // fetch an existing flight document by id
