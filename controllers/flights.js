@@ -8,6 +8,8 @@ module.exports = {
   getFlightNo,
   getAscendingDeparts,
   getPastFlights,
+  //   getProps,
+  addDestination,
 };
 
 async function getFlights(req, res) {
@@ -79,4 +81,27 @@ async function getPastFlights(req, res) {
   } else {
     res.json(modelData);
   }
+}
+
+// async function getProps(req, res) {
+//   const modelData = await modelFlights.getProps(req.params.info);
+//   if (modelData == "no data for the flight you are looking for :(") {
+//     res.status(404).json("no data for the flight you are looking for :(");
+//   } else {
+//     res.json(modelData);
+//   }
+// }
+
+async function addDestination(req, res) {
+  // fetch an existing flight document by id
+  const flight = await modelFlights.findById(req.params.id);
+  // add destinations for a flight
+  flight.destinations.push(req.body);
+  try {
+    // save the parent doc
+    await flight.save();
+  } catch (err) {
+    res.status(500).json({ err });
+  }
+  res.status(201).json(flight);
 }

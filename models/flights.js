@@ -1,4 +1,5 @@
 const daoFlights = require("../daos/flights");
+// const daoDestinations = require("../daos/destinations");
 
 module.exports = {
   getAll,
@@ -8,6 +9,8 @@ module.exports = {
   getFlightNo,
   getAscendingDeparts,
   getPastFlights,
+  //   getProps,
+  findById,
 };
 
 function getAll() {
@@ -74,4 +77,28 @@ async function getPastFlights() {
     }
   });
   return flights;
+}
+
+// //check
+// async function getProps(param) {
+//   const regex = new RegExp(param, "i");
+//   const flightData = await daoFlights.findOne({
+//     $or: [
+//       { airline: regex },
+//       { airport: regex },
+//       { flightNo: regex },
+//       { departs: regex },
+//       { status: regex },
+//       { destination: regex },
+//     ],
+//   });
+//   if (flightData == null || Object.keys(flightData).length == 0) {
+//     return "no data for the flight you are looking for :(";
+//   } else {
+//     return flightData;
+//   }
+// }
+
+function findById(id) {
+  return daoFlights.findById(id);
 }
