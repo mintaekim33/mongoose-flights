@@ -24,12 +24,13 @@ router.get("/ascending", flightController.getAscendingDeparts);
 // GET /flights/past
 router.get("/past", flightController.getPastFlights);
 
-/** Part 2
- * "I want to submit a flight info and view all of the properties for that flight." ??
- */
-// GET /flights/properties/:info
+// GET /flights/:flightNo/properties
 router.get("/:flightNo/properties", flightController.getProps);
 
+// PUT /flights/:id/destination
 router.put("/:id/destination", flightController.addDestination);
+
+// GET /flights/:id/listDestinations
+router.get("/:id/listDestinations", flightController.getListDestinations);
 
 module.exports = router;

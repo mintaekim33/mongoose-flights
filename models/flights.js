@@ -10,7 +10,9 @@ module.exports = {
   getAscendingDeparts,
   getPastFlights,
   getProps,
-  findById,
+  //   findById,
+  addDestination,
+  getListDestinations,
 };
 
 function getAll() {
@@ -86,6 +88,26 @@ async function getProps(param) {
   }
 }
 
-function findById(id) {
-  return daoFlights.findById(id);
+// function findById(id) {
+//   return daoFlights.findById(id);
+// }
+
+async function addDestination(req) {
+  const flightData = await daoFlights.findById(req.params.id);
+  flightData.destinations.push(req.body);
+  await flightData.save();
+  if (flightData == null || Object.keys(flightData).length == 0) {
+    return "destinations could not be added for this flight";
+  } else {
+    return flightData;
+  }
+}
+
+async function getListDestinations(param) {
+  const flightData = await daoFlights.findById(param);
+  if (flightData == null || Object.keys(flightData).length == 0) {
+    return "there are no destinations for this flight";
+  } else {
+    return flightData.destinations;
+  }
 }

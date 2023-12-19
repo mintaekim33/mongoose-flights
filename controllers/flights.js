@@ -10,6 +10,7 @@ module.exports = {
   getPastFlights,
   getProps,
   addDestination,
+  getListDestinations,
 };
 
 async function getFlights(req, res) {
@@ -97,16 +98,51 @@ async function getProps(req, res) {
   }
 }
 
+// async function addDestination(req, res) {
+//   // fetch an existing flight document by id
+//   const flight = await modelFlights.findById(req.params.id);
+//   // add destinations for a flight
+//   flight.destinations.push(req.body);
+//   try {
+//     // save the parent doc
+//     await flight.save();
+//   } catch (err) {
+//     res.status(500).json({ err });
+//   }
+//   res.status(201).json(flight);
+// }
 async function addDestination(req, res) {
   // fetch an existing flight document by id
-  const flight = await modelFlights.findById(req.params.id);
-  // add destinations for a flight
-  flight.destinations.push(req.body);
   try {
-    // save the parent doc
-    await flight.save();
+    const modelData = await modelFlights.addDestination(req);
+    if (modelData == "destinations could not be added for this flight") {
+      res.status(404).json("destinations could not be added for this flight");
+    } else {
+      res.status(201).json(modelData);
+    }
   } catch (err) {
+    console.log(err);
     res.status(500).json({ err });
   }
-  res.status(201).json(flight);
+  //   try {
+  //     // save the parent doc
+  //     await flight.save();
+  //   } catch (err) {
+  //     res.status(500).json({ err });
+  //   }
+  //   res.status(201).json(flight);
+}
+
+async function getListDestinations(req, res) {
+  try {
+    const modelData = await modelFlights.getListDestinations(req.params.id);
+    if (modelData == "there are no destinations for this flight") {
+      res.status(404).json("there are no destinations for this flight");
+    } else {
+      res.json(modelData);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
