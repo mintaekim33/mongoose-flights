@@ -33,4 +33,10 @@ router.put("/:id/destination", flightController.addDestination);
 // GET /flights/:id/listDestinations
 router.get("/:id/listDestinations", flightController.getListDestinations);
 
+// GET /flights/:id/listDestinationsByTime
+router.get(
+  "/:id/listDestinationsByTime",
+  flightController.getListDestinationsByTime
+);
+
 module.exports = router;

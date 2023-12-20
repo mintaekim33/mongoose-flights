@@ -10,9 +10,9 @@ module.exports = {
   getAscendingDeparts,
   getPastFlights,
   getProps,
-  //   findById,
   addDestination,
   getListDestinations,
+  getListDestinationsByTime,
 };
 
 function getAll() {
@@ -25,7 +25,6 @@ function createFlights(flight) {
 }
 
 async function getAirline(param) {
-  //   const flight = await daoFlights.find({ airline: param });
   // make 'airline' param case insensitive
   const flights = await daoFlights.find({
     airline: { $regex: new RegExp(param, "i") },
@@ -88,13 +87,12 @@ async function getProps(param) {
   }
 }
 
-// function findById(id) {
-//   return daoFlights.findById(id);
-// }
-
 async function addDestination(req) {
+  // fetch an existing flight document by id
   const flightData = await daoFlights.findById(req.params.id);
+  // add destinations for a flight
   flightData.destinations.push(req.body);
+  // save the parent doc
   await flightData.save();
   if (flightData == null || Object.keys(flightData).length == 0) {
     return "destinations could not be added for this flight";
@@ -110,4 +108,13 @@ async function getListDestinations(param) {
   } else {
     return flightData.destinations;
   }
+}
+
+async function getListDestinationsByTime(param) {
+  const flightData = await daoFlights.findById(param);
+  if (flightData == null || flightData.destinations.length === 0) {
+    return "there are no destinations for this flight";
+  }
+  flightData.destinations.sort((a, b) => a.arrival - b.arrival);
+  return flightData.destinations;
 }
