@@ -1,4 +1,5 @@
 const daoFlights = require("../daos/flights");
+const daoTickets = require("../daos/tickets");
 // const daoDestinations = require("../daos/destinations");
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
   addDestination,
   getListDestinations,
   getListDestinationsByTime,
+  getTickets,
 };
 
 function getAll() {
@@ -117,4 +119,20 @@ async function getListDestinationsByTime(param) {
   }
   flightData.destinations.sort((a, b) => a.arrival - b.arrival);
   return flightData.destinations;
+}
+
+async function getTickets(id) {
+  daoFlights.findById(id, function (err, flight) {
+    const tickets = daoTickets.find(
+      { flight: flight._id },
+      function (err, tickets) {
+        // what to do here
+        if (tickets == null || Object.keys(tickets).length == 0) {
+          return "there are no tickets for this flight";
+        } else {
+          return tickets;
+        }
+      }
+    );
+  });
 }

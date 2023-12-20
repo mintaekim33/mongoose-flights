@@ -39,4 +39,7 @@ router.get(
   flightController.getListDestinationsByTime
 );
 
+// GET /flights/:id/tickets
+router.get("/:id/tickets", flightController.getTickets);
+
 module.exports = router;

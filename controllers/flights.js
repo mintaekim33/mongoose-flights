@@ -12,6 +12,7 @@ module.exports = {
   addDestination,
   getListDestinations,
   getListDestinationsByTime,
+  getTickets,
 };
 
 async function getFlights(req, res) {
@@ -134,6 +135,20 @@ async function getListDestinationsByTime(req, res) {
     );
     if (modelData == "there are no destinations for this flight") {
       res.status(404).json("there are no destinations for this flight");
+    } else {
+      res.json(modelData);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+async function getTickets(req, res) {
+  try {
+    const modelData = await modelFlights.getTickets(req.params.id);
+    if (modelData == "there are no tickets for this flight") {
+      res.status(404).json("there are no tickets for this flight");
     } else {
       res.json(modelData);
     }
