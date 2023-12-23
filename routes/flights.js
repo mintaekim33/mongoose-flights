@@ -42,4 +42,10 @@ router.get(
 // GET /flights/:id/tickets
 router.get("/:id/tickets", flightController.getTickets);
 
+// POST /flights/:id/tickets/new
+router.post("/:id/tickets/new", flightController.createTickets);
+
+// DELETE /flights/:id/tickets/delete
+// router.delete("/:id/tickets/new", flightController.deleteTickets);
+
 module.exports = router;

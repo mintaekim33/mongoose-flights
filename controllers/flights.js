@@ -13,6 +13,7 @@ module.exports = {
   getListDestinations,
   getListDestinationsByTime,
   getTickets,
+  createTickets,
 };
 
 async function getFlights(req, res) {
@@ -150,8 +151,18 @@ async function getTickets(req, res) {
     if (modelData == "there are no tickets for this flight") {
       res.status(404).json("there are no tickets for this flight");
     } else {
-      res.json(modelData);
+      res.json(modelData); // res.json(tickets)
     }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+async function createTickets(req, res) {
+  try {
+    const ticket = await modelFlights.createTickets(req);
+    res.status(201).json(ticket);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal Server Error" });

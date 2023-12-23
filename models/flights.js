@@ -15,6 +15,7 @@ module.exports = {
   getListDestinations,
   getListDestinationsByTime,
   getTickets,
+  createTickets,
 };
 
 function getAll() {
@@ -122,17 +123,18 @@ async function getListDestinationsByTime(param) {
 }
 
 async function getTickets(id) {
-  daoFlights.findById(id, function (err, flight) {
-    const tickets = daoTickets.find(
-      { flight: flight._id },
-      function (err, tickets) {
-        // what to do here
-        if (tickets == null || Object.keys(tickets).length == 0) {
-          return "there are no tickets for this flight";
-        } else {
-          return tickets;
-        }
-      }
-    );
-  });
+  const flightData = await daoFlights.findById(id);
+  if (flightData == null || Object.keys(flightData).length == 0) {
+    return "there are no tickets for this flight";
+  }
+  const tickets = await daoTickets.find({ flight: flightData._id });
+  return tickets;
+}
+
+async function createTickets(req) {
+  const flightData = await daoFlights.findById(req.params.id);
+  console.log(flightData);
+  // add flight property
+  req.body.flight = flightData._id;
+  return daoTickets.create(req.body);
 }
