@@ -1,6 +1,5 @@
 const daoFlights = require("../daos/flights");
 const daoTickets = require("../daos/tickets");
-// const daoDestinations = require("../daos/destinations");
 
 module.exports = {
   getAll,
@@ -16,6 +15,7 @@ module.exports = {
   getListDestinationsByTime,
   getTickets,
   createTickets,
+  deleteTickets,
 };
 
 function getAll() {
@@ -95,7 +95,7 @@ async function addDestination(req) {
   const flightData = await daoFlights.findById(req.params.id);
   // add destinations for a flight
   flightData.destinations.push(req.body);
-  // save the parent doc
+  // save the parent doc to persist data in database
   await flightData.save();
   if (flightData == null || Object.keys(flightData).length == 0) {
     return "destinations could not be added for this flight";
@@ -132,9 +132,27 @@ async function getTickets(id) {
 }
 
 async function createTickets(req) {
+  // The create() function in Mongoose is designed to handle
+  // both frontend rendering and backend data persistence in a single step
   const flightData = await daoFlights.findById(req.params.id);
-  console.log(flightData);
   // add flight property
   req.body.flight = flightData._id;
   return daoTickets.create(req.body);
+}
+
+async function deleteTickets(req) {
+  const flightData = await daoFlights.findById(req.params.id);
+  //   console.log(flightData)
+  if (flightData == null || Object.keys(flightData).length == 0) {
+    return "ticket could not be deleted";
+  }
+  const tickets = await daoTickets.find({ flight: flightData._id });
+  //   tickets.remove(req.params.ticketId);
+  // update frontend
+  const updatedTickets = tickets.filter(
+    (ticket) => ticket._id.toString() !== req.params.ticketId
+  );
+  // update backend
+  await daoTickets.deleteOne({ _id: req.params.ticketId });
+  return updatedTickets;
 }

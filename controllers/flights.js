@@ -14,6 +14,7 @@ module.exports = {
   getListDestinationsByTime,
   getTickets,
   createTickets,
+  deleteTickets,
 };
 
 async function getFlights(req, res) {
@@ -163,6 +164,20 @@ async function createTickets(req, res) {
   try {
     const ticket = await modelFlights.createTickets(req);
     res.status(201).json(ticket);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+async function deleteTickets(req, res) {
+  try {
+    const modelData = await modelFlights.deleteTickets(req);
+    if (modelData == "ticket could not be deleted") {
+      res.status(404).json("ticket could not be deleted");
+    } else {
+      res.json(modelData);
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal Server Error" });

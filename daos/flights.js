@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// const destinationSchema = require("./destinations");
 
 const destinationSchema = new Schema({
   airport: {
